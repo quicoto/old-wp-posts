@@ -7,7 +7,7 @@
     <title>Old Posts - <?php echo get_bloginfo("name"); ?></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="./styles.css?ver=1.0.1">
+    <link rel="stylesheet" href="./styles.css?ver=1.0.2">
 </head>
 <body>
     <main class="container">
