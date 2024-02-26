@@ -1,4 +1,4 @@
-<?php include_once("../wp-load.php"); ?>
+<?php include_once "../wp-load.php"; ?>
 <!DOCTYPE html>
 <html class="no-js">
     <head>
@@ -41,79 +41,91 @@
 
 
 	   <ul class="nav nav-tabs">
-	      	<?php $categories = get_categories( 'exclude=3,78,122,9,112,12,14,28,111,83,,29,,146,121' );
+	      	<?php
+        $categories = get_categories(
+            "exclude=3,78,122,9,112,12,14,28,111,83,,29,,146,121"
+        );
 
-				foreach	($categories as $category){
+        foreach ($categories as $category) {
+            $class = "";
 
-					$class = '';
+            if ($category->cat_ID == $_GET["category"]) {
+                $class = 'class="active"';
+            }
 
-					if($category->cat_ID == $_GET['category']) $class='class="active"';
-
-					echo '<li '.$class.'><a href="index.php?category='.$category->cat_ID.'">';
-						print_r($category->name);
-					echo '</a></li>';
-				}
-			?>
+            echo "<li " .
+                $class .
+                '><a href="index.php?category=' .
+                $category->cat_ID .
+                '">';
+            print_r($category->name);
+            echo "</a></li>";
+        }
+        ?>
 	    </ul>
 
       <div class="row">
-      	<?php if(isset($_GET['category']) && $_GET['category'] != ""){ ?>
+      	<?php if (isset($_GET["category"]) && $_GET["category"] != "") { ?>
 				<?php
-				global $post;
-				$tmp_post = $post;
+    global $post;
+    $tmp_post = $post;
 
-				$args = array(
-			    'numberposts'     => 25,
-			    'offset'          => 0,
-			    'category'        => $_GET['category'],
-			    'orderby'         => 'rand',
-			    'order'           => 'DESC',
-			    'post_type'       => 'post',
-			    'post_status'     => 'publish',
-			    'suppress_filters' => true );
+    $args = [
+        "numberposts" => 25,
+        "offset" => 0,
+        "category" => $_GET["category"],
+        "orderby" => "rand",
+        "order" => "DESC",
+        "post_type" => "post",
+        "post_status" => "publish",
+        "suppress_filters" => true,
+    ];
 
-				$myposts = get_posts( $args );
-				foreach( $myposts as $post ) : setup_postdata($post); ?>
+    $myposts = get_posts($args);
+    foreach ($myposts as $post):
+        setup_postdata($post); ?>
 					<div class="span4">
 						<div class="well">
 							<h4><a target="_blank" href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a></h4>
 							<div class="date"><?php the_date(); ?></div>
 
 							<?php
+       // get the attachments type image
+       $attachments = get_children([
+           "post_parent" => $post->ID,
+           "numberposts" => $repeat,
+           "post_type" => "attachment",
+           "post_mime_type" => "image",
+       ]);
 
-								   // get the attachments type image
-							      $attachments = get_children( array(
-							                'post_parent' => $post->ID,
-							                'numberposts' => $repeat,
-							                'post_type' => 'attachment',
-							                'post_mime_type' => 'image')
-							                );
+       $image = "";
 
-							        $image = "";
+       // get the attachments
+       foreach ($attachments as $att_id => $attachment) {
+           // put the image in a array
+           $image = wp_get_attachment_image_src($att_id, "thumbnail");
 
-							        // get the attachments
-							        foreach ( $attachments as $att_id => $attachment ) {
-
-							            // put the image in a array
-							            $image = wp_get_attachment_image_src($att_id, 'thumbnail');
-
-							            // I just want 1 image, so break
-							            break;
-							        }
-										echo '<a target="_blank" href="'. $image[0] . '" title="' .  get_the_title() . '">';
-										echo "<img src='". $image[0] ."' style='width:150px;' />";
-										echo '</a>';
-
-							?>
+           // I just want 1 image, so break
+           break;
+       }
+       echo '<a target="_blank" href="' .
+           $image[0] .
+           '" title="' .
+           get_the_title() .
+           '">';
+       echo "<img src='" . $image[0] . "' style='width:150px;' />";
+       echo "</a>";
+       ?>
 							<p>
 								<textarea><?php the_title(); ?> <?php the_permalink(); ?></textarea>
 							</p>
 						</div>
 					</div>
-				<?php endforeach;
+				<?php
+    endforeach;
 
-					curl_close($ch);
-				?>
+    curl_close($ch);
+    ?>
 		<?php } ?>
       </div>
 
