@@ -7,13 +7,12 @@
     <title>Old Posts - <?php echo get_bloginfo("name"); ?></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="./styles.css?ver=1.0.3">
+    <link rel="stylesheet" href="./styles.css?ver=1.0.4">
 </head>
 <body>
     <main class="container">
         <header class="page-header">
             <h1><?php echo get_bloginfo("name"); ?> - Old Posts</h1>
-            <h2>Just pick a category</h2>
         </header>
 
         <nav>
@@ -45,8 +44,12 @@
             </ul>
         </nav>
 
+        <?php if (isset($_GET["category"]) && $_GET["category"] != "") {
+            $category_name = get_cat_name($_GET["category"]);
+            echo "<h2>Category: " . $category_name . "</h2>";
+        ?>
         <section class="list">
-            <?php if (isset($_GET["category"]) && $_GET["category"] != "") {
+            <?php
                 global $post;
                 $tmp_post = $post;
 
@@ -77,8 +80,12 @@
                             } ?>
                         </article>
                     <?php
-                endforeach;
-            } ?>
+                endforeach; ?>
+        </section>
+        <?php    } ?>
+    <footer>
+        <a href="https://github.com/quicoto/old-wp-posts">GitHub</a>
+    </footer>
     </main>
 </body>
 </html>
