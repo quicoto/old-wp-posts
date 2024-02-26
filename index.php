@@ -7,7 +7,7 @@
     <title>Old Posts - <?php echo get_bloginfo("name"); ?></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="./styles.css?ver=1.0.0">
+    <link rel="stylesheet" href="./styles.css?ver=1.0.1">
 </head>
 <body>
     <main class="container">
@@ -101,7 +101,7 @@
                                 $image[0] .
                                 "' alt='" .
                                 get_the_title() .
-                                "' style='width:150px;' />";
+                                "' />";
                             echo "</a>";
                             ?>
                         </article>
