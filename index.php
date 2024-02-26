@@ -35,8 +35,9 @@
                         '><a href="index.php?category=' .
                         $category->cat_ID .
                         '">';
-                    print_r($category->name . " (" . $category->category_count . ")");
-
+                    print_r(
+                        $category->name . " (" . $category->category_count . ")"
+                    );
 
                     echo "</a></li>";
                 }
@@ -46,23 +47,23 @@
 
         <section class="list">
             <?php if (isset($_GET["category"]) && $_GET["category"] != "") {
-            global $post;
-            $tmp_post = $post;
+                global $post;
+                $tmp_post = $post;
 
-            $args = [
-                "numberposts" => 25,
-                "offset" => 0,
-                "category" => $_GET["category"],
-                "orderby" => "rand",
-                "order" => "DESC",
-                "post_type" => "post",
-                "post_status" => "publish",
-                "suppress_filters" => true,
-            ];
+                $args = [
+                    "numberposts" => 25,
+                    "offset" => 0,
+                    "category" => $_GET["category"],
+                    "orderby" => "rand",
+                    "order" => "DESC",
+                    "post_type" => "post",
+                    "post_status" => "publish",
+                    "suppress_filters" => true,
+                ];
 
-            $myposts = get_posts($args);
-            foreach ($myposts as $post):
-                setup_postdata($post); ?>
+                $myposts = get_posts($args);
+                foreach ($myposts as $post):
+                    setup_postdata($post); ?>
                         <article>
                             <header>
                                 <h3>
@@ -70,44 +71,14 @@
                                 </h3>
                                 <span class="date"><?php the_date(); ?></span>
                             </header>
-                            <?php
-                            // get the attachments type image
-                            $attachments = get_children([
-                                "post_parent" => $post->ID,
-                                "numberposts" => $repeat,
-                                "post_type" => "attachment",
-                                "post_mime_type" => "image",
-                            ]);
 
-                            $image = "";
-
-                            // get the attachments
-                            foreach ($attachments as $att_id => $attachment) {
-                                // put the image in a array
-                                $image = wp_get_attachment_image_src(
-                                    $att_id,
-                                    "thumbnail"
-                                );
-
-                                // I just want 1 image, so break
-                                break;
-                            }
-                            echo '<a target="_blank" href="' .
-                                $image[0] .
-                                '" title="' .
-                                get_the_title() .
-                                '">';
-                            echo "<img src='" .
-                                $image[0] .
-                                "' alt='" .
-                                get_the_title() .
-                                "' />";
-                            echo "</a>";
-                            ?>
+                            <?php if (has_post_thumbnail()) {
+                                the_post_thumbnail();
+                            } ?>
                         </article>
                     <?php
-            endforeach;
-        } ?>
+                endforeach;
+            } ?>
     </main>
 </body>
 </html>
